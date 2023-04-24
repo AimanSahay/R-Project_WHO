@@ -1,0 +1,156 @@
+---
+title: "Project_WHO by Aiman Sahay dated 23-04-2023"
+output: html_notebook
+---
+
+```{r}
+# Reading the source file
+
+WHO <- read.csv("WHO.csv", stringsAsFactors = TRUE)
+```
+
+
+```{r}
+str(WHO)
+```
+
+
+```{r}
+summary(WHO) 
+```
+
+
+```{r}
+# Creating subset of data
+
+WHO_Europe <- subset(WHO, Region == "Europe") 
+str(WHO_Europe)
+```
+
+
+```{r}
+# Saving the subset in a new csv file
+
+write.csv(WHO_Europe, "WHO_Europe.csv")
+```
+
+
+```{r}
+# Checking which files are there currently in our working directory
+
+ls()
+```
+
+
+```{r}
+# Removing excess files
+
+rm(WHO_Europe)
+```
+
+
+```{r}
+# Working with data
+
+WHO$Under15
+```
+
+
+```{r}
+mean(WHO$Under15)
+```
+
+
+```{r}
+sd(WHO$Under15)
+```
+
+
+```{r}
+summary(WHO$Under15)
+```
+
+
+```{r}
+which.min(WHO$Under15)
+```
+
+
+```{r}
+WHO$Country[86] # which country has the minimum % of population under 15
+```
+
+
+```{r}
+which.max(WHO$Under15)
+```
+
+
+```{r}
+WHO$Country[124] # which country has the maximum % of population under 15
+```
+
+
+```{r}
+# Creating plots
+
+# Scatter plots
+plot(WHO$GNI, WHO$FertilityRate, xlab = "GNI", ylab = "Fertlity Rate", main = "Fertility Rate as per Income levels")
+```
+
+
+```{r}
+outliers <- subset(WHO, GNI > 10000 & FertilityRate > 2.5) 
+nrow(outliers)
+```
+
+
+```{r}
+outliers[c("Country", "GNI", "FertilityRate")] 
+# Observation: Equatorial Guinea very rich due to oil production but wealth is distributed unevenly
+```
+
+
+```{r}
+# Histogram
+
+hist(WHO$CellularSubscribers, xlab = "Cellular Subscibers", ylab = "", main = "Histogram of Cellular Subscibers")
+```
+
+
+```{r}
+# Box plot
+
+boxplot(WHO$LifeExpectancy~WHO$Region) 
+# Note: Any point that is > 3rd quartile + IQR OR < 1st quartile + IQR is an outlier in a box plot.
+```
+
+
+```{r}
+# Adding Labels
+boxplot(WHO$LifeExpectancy ~ WHO$Region, xlab = "", ylab ="Life Expectancy", main = "Life Expectancy of Countries by Region")
+```
+
+
+```{r}
+# Creating table
+
+table(WHO$Region)
+```
+
+
+```{r}
+# Calculating statistics using tapply
+
+tapply(WHO$Over60, WHO$Region, mean) 
+# this splits the data by the 2nd argument and applies the function in the 3rd argument)
+```
+
+
+```{r}
+tapply(WHO$LiteracyRate, WHO$Region, min)
+
+# Removing NA values
+tapply(WHO$LiteracyRate, WHO$Region, min, na.rm=TRUE)
+
+```
